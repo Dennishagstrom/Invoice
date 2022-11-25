@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    // INFORMATION
+    id              String            @id @default(cuid())
+    firstName        String
+    lastName        String
+    email           String            @unique
+    password        String
+    role            Role              @default(USER)
+
+    // DATES
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+
+    // RELATIONS
+    contacts        Contact[]
+    invoices        Invoice[]
+    offers          Offer[]
+}
+
+model Invoice {
+    // INFORMATION
+    id                String             @id @default(cuid())
+    amount            Int
+    paid              Boolean            @default(false)
+    dueDate           DateTime
+    mva               Int                @default(25)
+
+    // DATES
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+
+    // RELATIONS
+    contact           Contact           @relation(fields: [orgNumber], references: [orgNumber])
+    orgNumber         String
+    invoiceLines      InvoiceLines[]
+    ourReference      User?              @relation(fields: [ourReferenceId], references: [id])
+    ourReferenceId    String?
+    theirReference    ContactPerson?    @relation(fields: [theirReferenceId], references: [id])
+    theirReferenceId  String?
+}
+
+model InvoiceLines {
+    // INFORMATION
+    id            String             @id @default(cuid())
+    description   String
+    quantity      Int                @default(1)
+    price         Int               @default(0)
+    discount      Int                @default(0)
+    comment       String?
+
+    // RELATIONS
+    invoice       Invoice      @relation(fields: [invoiceId], references: [id])
+    invoiceId     String
+    product       Products?     @relation(fields: [productId], references: [id])
+    productId String?
+}
+
+model Contact {
+    // INFORMATION
+    orgNumber   String      @id @unique
+    type        ContactType
+    name        String
+    phone       String
+
+    // ADDRESS
+    address     String
+    houseNumber String
+    postalCode  String
+    city        String
+    country     String
+
+    // DATES
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+
+    // RELATIONS
+    contactPersons  ContactPerson[]
+    invoices    Invoice[]
+    offers     Offer[]
+    contactOwner User? @relation(fields: [contactOwnerId], references: [id])
+    contactOwnerId String?
+}
+
+model ContactPerson {
+    // INFORMATION
+    id        String                   @id @default(cuid())
+    firstName  String
+    lastName  String
+    email     String
+    phone     String
+
+    // DATES
+    createdAt DateTime                 @default(now())
+    updatedAt DateTime                 @updatedAt
+
+    // RELATIONS
+    contact   Contact @relation(fields: [orgNumber], references: [orgNumber])
+    orgNumber String
+    invoices  Invoice[]
+    offers    Offer[]
+}
+
+model Products {
+    // INFORMATION
+    id                   String              @id @default(cuid())
+    name                 String
+    unitPrice            Int
+    note                 String?
+    active               Boolean                  @default(true)
+
+    // DATES
+    createdAt DateTime                 @default(now())
+    updatedAt DateTime                 @updatedAt
+
+    // RELATIONS
+    invoiceLines InvoiceLines[]
+    offerLines OfferLines[]
+    category    Category? @relation(fields: [categoryId], references: [id])
+    categoryId  String?
+}
+
+model Category {
+    // INFORMATION
+    id                   String        @id @default(cuid())
+    name                 String        @unique
+    note                 String?
+
+    // DATES
+    createdAt DateTime                 @default(now())
+    updatedAt DateTime                 @updatedAt
+
+    // RELATIONS
+    products Products[]
+}
+
+model Offer {
+    // INFORMATION
+    id                String             @id @default(cuid())
+    amount            Int
+    validUntil        DateTime
+    accepted          Boolean            @default(false)
+
+    // DATES
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+
+    // RELATIONS
+    contact           Contact           @relation(fields: [orgNumber], references: [orgNumber])
+    orgNumber         String
+    offerLines        OfferLines[]
+    ourReference      User?              @relation(fields: [ourReferenceId], references: [id])
+    ourReferenceId    String?
+    theirReference    ContactPerson?    @relation(fields: [theirReferenceId], references: [id])
+    theirReferenceId  String?
+}
+
+model OfferLines {
+    // INFORMATION
+    id            String             @id @default(cuid())
+    description   String
+    quantity      Int                @default(1)
+    price         Int?               @default(0)
+    discount      Int                @default(0)
+    comment       String?
+
+    // RELATIONS
+    offer         Offer      @relation(fields: [offerId], references: [id])
+    offerId       String
+    product       Products?     @relation(fields: [productId], references: [id])
+    productId String?
+}
+
+enum Role {
+    ADMIN
+    USER
+}
+
+enum ContactType {
+    CUSTOMER
+    CONTACT
+}
