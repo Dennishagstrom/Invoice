@@ -1,4 +1,4 @@
-import {object, string, number, bool, date, array} from 'yup'
+import {object, string, number, bool} from 'yup'
 
 export default object({
     idr: string().max(255),

@@ -1,4 +1,4 @@
-import {object, string, array, bool} from 'yup'
+import {object, string} from 'yup'
 
 export default object({
     firstName: string().max(255),

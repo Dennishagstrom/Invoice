@@ -12,39 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCategory = exports.updateCategory = exports.findCategoryById = exports.getCategories = exports.newCategory = void 0;
+exports.deleteCategory = exports.updateCategory = exports.newCategory = exports.findCategoryById = exports.getCategories = void 0;
 const client_1 = __importDefault(require("../utils/client"));
 const errorHandler_1 = require("./errorHandler");
-function newCategory(req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const data = req.body;
-        try {
-            const category = yield client_1.default.category.create({
-                data: {
-                    name: req.body.name,
-                    note: req.body.note,
-                    products: {
-                        connect: data.products.map((product) => {
-                            return { id: product.id };
-                        })
-                    }
-                },
-                include: {
-                    products: true
-                }
-            });
-            res.status(201).json({
-                message: 'Category created',
-                data: category
-            });
-        }
-        catch (e) {
-            console.log(e);
-            return yield (0, errorHandler_1.errorHandler)(res, e);
-        }
-    });
-}
-exports.newCategory = newCategory;
 function getCategories(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const categories = yield client_1.default.category.findMany();
@@ -78,6 +48,36 @@ function findCategoryById(req, res, next) {
     });
 }
 exports.findCategoryById = findCategoryById;
+function newCategory(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const data = req.body;
+        try {
+            const category = yield client_1.default.category.create({
+                data: {
+                    name: req.body.name,
+                    note: req.body.note,
+                    products: {
+                        connect: data.products.map((product) => {
+                            return { id: product.id };
+                        })
+                    }
+                },
+                include: {
+                    products: true
+                }
+            });
+            res.status(201).json({
+                message: 'Category created',
+                data: category
+            });
+        }
+        catch (e) {
+            console.log(e);
+            return yield (0, errorHandler_1.errorHandler)(res, e);
+        }
+    });
+}
+exports.newCategory = newCategory;
 function updateCategory(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

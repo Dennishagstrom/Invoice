@@ -4,32 +4,6 @@ import {Product} from "../types/product";
 import {errorHandler} from "./errorHandler";
 import {Request, Response, NextFunction} from "express";
 
-export async function newCategory(req: Request, res: Response, next: NextFunction) {
-    const data: Category = req.body;
-    try {
-        const category = await prisma.category.create({
-            data: {
-                name: req.body.name,
-                note: req.body.note,
-                products: {
-                    connect: data.products.map((product: Product) => {
-                        return {id: product.id}
-                    })
-                }
-            },
-            include: {
-                products: true
-            }
-        });
-        res.status(201).json({
-            message: 'Category created',
-            data: category
-        });
-    } catch (e: any) {
-        console.log(e);
-        return await errorHandler(res, e);
-    }
-}
 
 export async function getCategories(req: Request, res: Response, next: NextFunction) {
     const categories = await prisma.category.findMany();
@@ -55,6 +29,33 @@ export async function findCategoryById(req: Request, res: Response, next: NextFu
             data: category
         });
     } catch (e: any) {
+        return await errorHandler(res, e);
+    }
+}
+
+export async function newCategory(req: Request, res: Response, next: NextFunction) {
+    const data: Category = req.body;
+    try {
+        const category = await prisma.category.create({
+            data: {
+                name: req.body.name,
+                note: req.body.note,
+                products: {
+                    connect: data.products.map((product: Product) => {
+                        return {id: product.id}
+                    })
+                }
+            },
+            include: {
+                products: true
+            }
+        });
+        res.status(201).json({
+            message: 'Category created',
+            data: category
+        });
+    } catch (e: any) {
+        console.log(e);
         return await errorHandler(res, e);
     }
 }

@@ -1,4 +1,4 @@
-import {object, string, number, bool, date, array} from 'yup'
+import {object, string, number, date, array} from 'yup'
 import offerLinesSchema from './offerLines.schema'
 
 export default object({

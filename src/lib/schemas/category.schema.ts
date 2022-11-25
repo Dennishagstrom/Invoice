@@ -1,4 +1,4 @@
-import {object, string, number, bool, date, array} from 'yup'
+import {object, string, array} from 'yup'
 import productSchema from "./product.schema";
 
 export default object({
