@@ -8,28 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authorization = void 0;
-const jwt = require("jsonwebtoken");
-function authorization(req, res, next) {
+exports.seedCategories = void 0;
+const faker_1 = require("@faker-js/faker");
+const client_1 = __importDefault(require("../../src/utils/client"));
+// Faker Norwegian
+faker_1.faker.locale = 'nb_NO';
+const fakeCategory = () => ({
+    name: faker_1.faker.random.word(),
+    note: faker_1.faker.lorem.sentence()
+});
+// Create random categories
+function seedCategories() {
     return __awaiter(this, void 0, void 0, function* () {
-        const token = req.cookies.token;
-        if (!token) {
-            return res.status(401).json({
-                message: "Unauthorized",
-            });
-        }
-        try {
-            const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-            if (!verified)
-                throw new Error("Unauthenticated");
-            return next();
-        }
-        catch (e) {
-            return res.status(401).json({
-                message: e || "Unauthorized",
-            });
+        for (let i = 0; i < 15; i++) {
+            yield client_1.default.category.createMany({ data: fakeCategory() });
         }
     });
 }
-exports.authorization = authorization;
+exports.seedCategories = seedCategories;

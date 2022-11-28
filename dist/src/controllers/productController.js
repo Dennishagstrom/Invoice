@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.newProduct = exports.getProduct = exports.getProducts = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getProducts(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getProducts(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const products = yield client_1.default.products.findMany();
         res.status(200).json({
@@ -25,7 +25,7 @@ function getProducts(req, res, next) {
     });
 }
 exports.getProducts = getProducts;
-function getProduct(req, res, next) {
+function getProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -45,7 +45,7 @@ function getProduct(req, res, next) {
     });
 }
 exports.getProduct = getProduct;
-function newProduct(req, res, next) {
+function newProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
@@ -73,7 +73,7 @@ function newProduct(req, res, next) {
     });
 }
 exports.newProduct = newProduct;
-function updateProduct(req, res, next) {
+function updateProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -105,7 +105,7 @@ function updateProduct(req, res, next) {
     });
 }
 exports.updateProduct = updateProduct;
-function deleteProduct(req, res, next) {
+function deleteProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

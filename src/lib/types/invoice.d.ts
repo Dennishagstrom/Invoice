@@ -5,13 +5,13 @@ export interface Invoice {
     id: string
     orgNumber: string
     amount: number
-    paid: boolean
+    paid?: boolean
     dueDate: Date
-    mva: number | null
-    createdAt: Date
-    updatedAt: Date
+    mva?: number | null
+    createdAt?: Date
+    updatedAt?: Date
     contact: Contact | null
-    ourReferenceId: string | null
-    theirReferenceId: string | null
+    ourReferenceId?: string | null
+    theirReferenceId?: string | null
     invoiceLines: InvoiceLine[]
 }

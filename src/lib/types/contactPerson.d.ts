@@ -5,8 +5,8 @@ export interface ContactPerson {
     lastName: string
     email: string
     phone: string
-    createdAt: string
-    updatedAt: string
+    createdAt?: string
+    updatedAt?: string
     orgNumber: string
     contact: Contact
 }

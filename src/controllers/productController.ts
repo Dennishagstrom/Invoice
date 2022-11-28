@@ -1,9 +1,9 @@
 import prisma from "../utils/client";
-import {Product} from "../types/product";
+import {Product} from "../lib/types/product";
 import {Request, Response, NextFunction} from 'express';
-import {errorHandler} from "./errorHandler";
+import {errorHandler} from "../utils/errorHandler";
 
-export async function getProducts(req: Request, res: Response, next: NextFunction) {
+export async function getProducts(req: Request, res: Response) {
     const products = await prisma.products.findMany();
     res.status(200).json({
         message: 'All products',
@@ -11,7 +11,7 @@ export async function getProducts(req: Request, res: Response, next: NextFunctio
     });
 }
 
-export async function getProduct(req: Request, res: Response, next: NextFunction) {
+export async function getProduct(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const product = await prisma.products.findUniqueOrThrow({
@@ -28,7 +28,7 @@ export async function getProduct(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function newProduct(req: Request, res: Response, next: NextFunction) {
+export async function newProduct(req: Request, res: Response) {
     try {
         const data: Product = req.body;
         const product = await prisma.products.create({
@@ -53,7 +53,7 @@ export async function newProduct(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function updateProduct(req: Request, res: Response, next: NextFunction) {
+export async function updateProduct(req: Request, res: Response) {
     try {
         const {id} = req.params
         const data: Product = req.body;
@@ -82,7 +82,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
     }
 }
 
-export async function deleteProduct(req: Request, res: Response, next: NextFunction) {
+export async function deleteProduct(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const deletedProduct = await prisma.products.delete({

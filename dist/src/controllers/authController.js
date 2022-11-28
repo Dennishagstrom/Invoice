@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerUser = exports.protectedRoute = exports.logout = exports.login = void 0;
 const client_1 = __importDefault(require("../utils/client"));
 const jwt_1 = require("../utils/jwt");
-const errorHandler_1 = require("./errorHandler");
+const errorHandler_1 = require("../utils/errorHandler");
+const runtime_1 = require("@prisma/client/runtime");
 const jwt = require('jsonwebtoken');
 const secret = process.env.TOKEN_SECRET;
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid').v4;
-function login(req, res, next) {
+function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const email = req.body.email;
@@ -64,13 +65,17 @@ function login(req, res, next) {
             });
         }
         catch (e) {
-            console.log(e);
+            if (e instanceof runtime_1.NotFoundError) {
+                return res.status(401).json({
+                    message: 'Wrong username or password',
+                });
+            }
             return (0, errorHandler_1.errorHandler)(res, e);
         }
     });
 }
 exports.login = login;
-function logout(req, res, next) {
+function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         return res
             .clearCookie("token")
@@ -81,7 +86,7 @@ function logout(req, res, next) {
     });
 }
 exports.logout = logout;
-function protectedRoute(req, res, next) {
+function protectedRoute(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         return res.status(200).json({
             message: 'You are logged in',
@@ -89,7 +94,7 @@ function protectedRoute(req, res, next) {
     });
 }
 exports.protectedRoute = protectedRoute;
-function registerUser(req, res, next) {
+function registerUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;

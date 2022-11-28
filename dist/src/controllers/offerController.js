@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOffer = exports.updateOffer = exports.newOffer = exports.getOffer = exports.getOffers = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getOffers(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getOffers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const offers = yield client_1.default.offer.findMany({
             include: {
@@ -29,7 +29,7 @@ function getOffers(req, res, next) {
     });
 }
 exports.getOffers = getOffers;
-function getOffer(req, res, next) {
+function getOffer(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -52,7 +52,7 @@ function getOffer(req, res, next) {
     });
 }
 exports.getOffer = getOffer;
-function newOffer(req, res, next) {
+function newOffer(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
@@ -93,7 +93,7 @@ function newOffer(req, res, next) {
     });
 }
 exports.newOffer = newOffer;
-function updateOffer(req, res, next) {
+function updateOffer(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -133,7 +133,7 @@ function updateOffer(req, res, next) {
     });
 }
 exports.updateOffer = updateOffer;
-function deleteOffer(req, res, next) {
+function deleteOffer(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

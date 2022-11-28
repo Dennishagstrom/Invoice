@@ -9,27 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authorization = void 0;
-const jwt = require("jsonwebtoken");
-function authorization(req, res, next) {
+exports.errorHandler = void 0;
+const runtime_1 = require("@prisma/client/runtime");
+function errorHandler(res, e) {
     return __awaiter(this, void 0, void 0, function* () {
-        const token = req.cookies.token;
-        if (!token) {
-            return res.status(401).json({
-                message: "Unauthorized",
+        if (e.code === 'P2002') {
+            return res.status(400).json({
+                message: 'Already exists.'
             });
         }
-        try {
-            const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-            if (!verified)
-                throw new Error("Unauthenticated");
-            return next();
-        }
-        catch (e) {
-            return res.status(401).json({
-                message: e || "Unauthorized",
+        if (e.code === 'P2003') {
+            return res.status(404).json({
+                message: 'Not found'
             });
         }
+        if (e.code === 'P2025') {
+            return res.status(400).json({
+                message: 'Cant find what your are looking for'
+            });
+        }
+        if (e instanceof runtime_1.NotFoundError) {
+            return res.status(404).json({
+                message: 'Could not be found'
+            });
+        }
+        return res.status(500).json({
+            message: 'HER SKJEDDE DET NOE FEIL'
+        });
     });
 }
-exports.authorization = authorization;
+exports.errorHandler = errorHandler;

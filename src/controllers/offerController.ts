@@ -1,10 +1,10 @@
 import prisma from "../utils/client";
-import {Offer} from "../types/offer";
-import {OfferLine} from "../types/offerLine";
-import {errorHandler} from "./errorHandler";
+import {Offer} from "../lib/types/offer";
+import {OfferLine} from "../lib/types/offerLine";
+import {errorHandler} from "../utils/errorHandler";
 import {Request, Response, NextFunction} from "express";
 
-export async function getOffers(req: Request, res: Response, next: NextFunction) {
+export async function getOffers(req: Request, res: Response) {
     const offers = await prisma.offer.findMany({
         include: {
             offerLines: true
@@ -16,7 +16,7 @@ export async function getOffers(req: Request, res: Response, next: NextFunction)
     });
 }
 
-export async function getOffer(req: Request, res: Response, next: NextFunction) {
+export async function getOffer(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const offer = await prisma.offer.findUniqueOrThrow({
@@ -36,7 +36,7 @@ export async function getOffer(req: Request, res: Response, next: NextFunction) 
     }
 }
 
-export async function newOffer(req: Request, res: Response, next: NextFunction) {
+export async function newOffer(req: Request, res: Response) {
     try {
         const data: Offer = req.body;
         const offer = await prisma.offer.create({
@@ -74,7 +74,7 @@ export async function newOffer(req: Request, res: Response, next: NextFunction) 
     }
 }
 
-export async function updateOffer(req: Request, res: Response, next: NextFunction) {
+export async function updateOffer(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const data: Offer = req.body;
@@ -111,7 +111,7 @@ export async function updateOffer(req: Request, res: Response, next: NextFunctio
     }
 }
 
-export async function deleteOffer(req: Request, res: Response, next: NextFunction) {
+export async function deleteOffer(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const offer = await prisma.offer.delete({

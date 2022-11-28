@@ -1,7 +1,7 @@
 /*
  * General utils for managing cookies in Typescript.
  */
-import {Token} from "../types/token";
+import {Token} from "../lib/types/token";
 
 export async function setCookie(name: string, val: string, token: Token) {
     const date = new Date();

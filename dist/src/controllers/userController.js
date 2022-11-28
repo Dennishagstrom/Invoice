@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUser = exports.getUsers = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
+const errorHandler_1 = require("../utils/errorHandler");
 const bcrypt = require('bcrypt');
-function getUsers(req, res, next) {
+function getUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const users = yield client_1.default.user.findMany();
         res.status(200).json({
@@ -26,7 +26,7 @@ function getUsers(req, res, next) {
     });
 }
 exports.getUsers = getUsers;
-function getUser(req, res, next) {
+function getUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -49,7 +49,7 @@ function getUser(req, res, next) {
     });
 }
 exports.getUser = getUser;
-function updateUser(req, res, next) {
+function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -78,7 +78,7 @@ function updateUser(req, res, next) {
     });
 }
 exports.updateUser = updateUser;
-function deleteUser(req, res, next) {
+function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

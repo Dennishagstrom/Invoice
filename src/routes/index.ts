@@ -29,9 +29,9 @@ import contactPersonSchema from "../lib/schemas/contactPerson.schema";
 import contactSchema from "../lib/schemas/contact.schema";
 import categorySchema from "../lib/schemas/category.schema";
 import productSchema from "../lib/schemas/product.schema";
+import {seedDb} from "../../prisma/seed";
 
 export const routes = express.Router();
-
 
 // USER ROUTES
 routes.use('/users', authorization);
@@ -92,6 +92,9 @@ routes.delete('/offers/:id', deleteOffer);
 routes.post('/login', login);
 routes.post('/logout', logout);
 routes.post('/register', validate(userSchema), registerUser);
+
+// SEED DATABASE
+routes.get('/seed', seedDb);
 
 // CHECK IF AUTHENTICATED
 routes.get('/protected', authorization, protectedRoute);

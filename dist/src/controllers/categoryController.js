@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategory = exports.updateCategory = exports.newCategory = exports.findCategoryById = exports.getCategories = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getCategories(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getCategories(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const categories = yield client_1.default.category.findMany();
         res.status(200).json({
@@ -25,7 +25,7 @@ function getCategories(req, res, next) {
     });
 }
 exports.getCategories = getCategories;
-function findCategoryById(req, res, next) {
+function findCategoryById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -48,7 +48,7 @@ function findCategoryById(req, res, next) {
     });
 }
 exports.findCategoryById = findCategoryById;
-function newCategory(req, res, next) {
+function newCategory(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const data = req.body;
         try {
@@ -78,7 +78,7 @@ function newCategory(req, res, next) {
     });
 }
 exports.newCategory = newCategory;
-function updateCategory(req, res, next) {
+function updateCategory(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -102,7 +102,7 @@ function updateCategory(req, res, next) {
     });
 }
 exports.updateCategory = updateCategory;
-function deleteCategory(req, res, next) {
+function deleteCategory(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

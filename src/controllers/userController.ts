@@ -1,11 +1,11 @@
 import prisma from "../utils/client";
-import {User} from "../types/user";
+import {User} from "../lib/types/user";
 import {NextFunction, Request, Response} from "express";
-import {errorHandler} from "./errorHandler";
+import {errorHandler} from "../utils/errorHandler";
 
 const bcrypt = require('bcrypt');
 
-export async function getUsers(req: Request, res: Response, next: NextFunction) {
+export async function getUsers(req: Request, res: Response) {
     const users = await prisma.user.findMany();
     res.status(200).json({
         message: 'All users',
@@ -13,7 +13,7 @@ export async function getUsers(req: Request, res: Response, next: NextFunction) 
     });
 }
 
-export async function getUser(req: Request, res: Response, next: NextFunction) {
+export async function getUser(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const user = await prisma.user.findUniqueOrThrow({
@@ -33,7 +33,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export async function updateUser(req: Request, res: Response, next: NextFunction) {
+export async function updateUser(req: Request, res: Response) {
     try {
         const {id} = req.params
         const data: User = req.body;
@@ -59,7 +59,7 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function deleteUser(req: Request, res: Response, next: NextFunction) {
+export async function deleteUser(req: Request, res: Response) {
     try {
         const {id} = req.params
         const deletedUser = await prisma.user.delete({

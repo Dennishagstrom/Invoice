@@ -1,10 +1,11 @@
 import prisma from "../utils/client";
-import {Contact} from "../types/contact";
+import {Contact} from "../lib/types/contact";
 import {Request, Response, NextFunction} from "express";
-import {errorHandler} from "./errorHandler";
+import {errorHandler} from "../utils/errorHandler";
+import {ContactPerson} from "../lib/types/contactPerson";
 
 
-export async function getContacts(req: Request, res: Response, next: NextFunction) {
+export async function getContacts(req: Request, res: Response) {
     const contacts = await prisma.contact.findMany();
     res.status(200).json({
         message: 'All contacts',
@@ -12,7 +13,7 @@ export async function getContacts(req: Request, res: Response, next: NextFunctio
     });
 }
 
-export async function findContactById(req: Request, res: Response, next: NextFunction) {
+export async function findContactById(req: Request, res: Response) {
     interface ContactParams {
         includeContactPersons?: string
         includeContactOwner?: string
@@ -43,7 +44,7 @@ export async function findContactById(req: Request, res: Response, next: NextFun
 }
 
 
-export async function newContact(req: Request, res: Response, next: NextFunction) {
+export async function newContact(req: Request, res: Response) {
     try {
         const data: Contact = req.body;
         const newContact = await prisma.contact.create({
@@ -57,7 +58,17 @@ export async function newContact(req: Request, res: Response, next: NextFunction
                 city: data.city,
                 country: data.country,
                 type: data.type,
-                contactOwnerId: data.contactOwnerId
+                contactOwnerId: data.contactOwnerId,
+                contactPersons: {
+                    create: data.contactPersons.map((contactPerson: ContactPerson) => {
+                        return {
+                            firstName: contactPerson.firstName,
+                            lastName: contactPerson.lastName,
+                            phone: contactPerson.phone,
+                            email: contactPerson.email,
+                        }
+                    })
+                }
             }
         });
 
@@ -71,7 +82,8 @@ export async function newContact(req: Request, res: Response, next: NextFunction
 }
 
 
-export async function updateContact(req: Request, res: Response, next: NextFunction) {
+export async function updateContact(req: Request, res: Response) {
+    console.log(req.body);
     try {
         const {id} = req.params
         const data: Contact = req.body;
@@ -89,7 +101,7 @@ export async function updateContact(req: Request, res: Response, next: NextFunct
                 city: data.city,
                 country: data.country,
                 type: data.type,
-                contactOwnerId: data.contactOwnerId
+                contactOwnerId: data.contactOwnerId,
             }
         });
         return res.status(200).json({
@@ -101,7 +113,7 @@ export async function updateContact(req: Request, res: Response, next: NextFunct
     }
 }
 
-export async function deleteContact(req: Request, res: Response, next: NextFunction) {
+export async function deleteContact(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const deletedContact = await prisma.contact.delete({

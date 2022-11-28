@@ -1,9 +1,9 @@
 import prisma from "../utils/client";
-import {ContactPerson} from "../types/contactPerson";
+import {ContactPerson} from "../lib/types/contactPerson";
 import {Request, Response, NextFunction} from "express";
-import {errorHandler} from "./errorHandler";
+import {errorHandler} from "../utils/errorHandler";
 
-export async function getContactPersons(req: Request, res: Response, next: NextFunction) {
+export async function getContactPersons(req: Request, res: Response) {
     const contactPersons = await prisma.contactPerson.findMany();
     res.status(200).json({
         message: 'All contact persons',
@@ -11,7 +11,7 @@ export async function getContactPersons(req: Request, res: Response, next: NextF
     });
 }
 
-export async function getContactPerson(req: Request, res: Response, next: NextFunction) {
+export async function getContactPerson(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const contactPerson = await prisma.contactPerson.findUniqueOrThrow({
@@ -31,7 +31,7 @@ export async function getContactPerson(req: Request, res: Response, next: NextFu
     }
 }
 
-export async function newContactPerson(req: Request, res: Response, next: NextFunction) {
+export async function newContactPerson(req: Request, res: Response) {
     try {
         const data: ContactPerson = req.body;
         const contactPerson = await prisma.contactPerson.create({
@@ -55,7 +55,7 @@ export async function newContactPerson(req: Request, res: Response, next: NextFu
     }
 }
 
-export async function updateContactPerson(req: Request, res: Response, next: NextFunction) {
+export async function updateContactPerson(req: Request, res: Response) {
     try {
         const {id} = req.params
         const data: ContactPerson = req.body;
@@ -80,7 +80,7 @@ export async function updateContactPerson(req: Request, res: Response, next: Nex
     }
 }
 
-export async function deleteContactPerson(req: Request, res: Response, next: NextFunction) {
+export async function deleteContactPerson(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const contactPerson = await prisma.contactPerson.delete({

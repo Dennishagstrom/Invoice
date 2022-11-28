@@ -1,4 +1,5 @@
 type Type = "CUSTOMER" | "CONTACT"
+import {ContactPerson} from "./contactPerson";
 
 export interface Contact {
     orgNumber: string
@@ -10,7 +11,8 @@ export interface Contact {
     postalCode: string
     city: string
     country: string
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
     contactOwnerId?: string | null
+    contactPersons: ContactPerson[]
 }

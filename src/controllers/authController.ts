@@ -1,7 +1,8 @@
 import prisma from "../utils/client";
 import {generateToken} from "../utils/jwt";
-import {errorHandler} from "./errorHandler";
+import {errorHandler} from "../utils/errorHandler";
 import {Request, Response, NextFunction} from "express";
+import {NotFoundError} from "@prisma/client/runtime";
 
 const jwt = require('jsonwebtoken');
 const secret = process.env.TOKEN_SECRET;
@@ -9,7 +10,7 @@ const secret = process.env.TOKEN_SECRET;
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid').v4;
 
-export async function login(req: Request, res: Response, next: NextFunction) {
+export async function login(req: Request, res: Response) {
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -58,12 +59,16 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             });
 
     } catch (e) {
-        console.log(e)
+        if (e instanceof NotFoundError) {
+            return res.status(401).json({
+                message: 'Wrong username or password',
+            });
+        }
         return errorHandler(res, e);
     }
 }
 
-export async function logout(req: Request, res: Response, next: NextFunction) {
+export async function logout(req: Request, res: Response) {
     return res
         .clearCookie("token")
         .status(200)
@@ -72,13 +77,13 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
         });
 }
 
-export async function protectedRoute(req: Request, res: Response, next: NextFunction) {
+export async function protectedRoute(req: Request, res: Response) {
     return res.status(200).json({
         message: 'You are logged in',
     });
 }
 
-export async function registerUser(req: Request, res: Response, next: NextFunction) {
+export async function registerUser(req: Request, res: Response) {
     try {
         const data = req.body;
         const hashedPassword = await bcrypt.hash(data.password, 10);

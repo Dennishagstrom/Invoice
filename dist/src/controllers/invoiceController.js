@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteInvoice = exports.updateInvoice = exports.newInvoice = exports.getInvoice = exports.getInvoices = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getInvoices(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getInvoices(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const invoices = client_1.default.invoice.findMany();
         return res.status(200).json({
@@ -25,7 +25,7 @@ function getInvoices(req, res, next) {
     });
 }
 exports.getInvoices = getInvoices;
-function getInvoice(req, res, next) {
+function getInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -49,7 +49,7 @@ function getInvoice(req, res, next) {
     });
 }
 exports.getInvoice = getInvoice;
-function newInvoice(req, res, next) {
+function newInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
@@ -86,7 +86,7 @@ function newInvoice(req, res, next) {
     });
 }
 exports.newInvoice = newInvoice;
-function updateInvoice(req, res, next) {
+function updateInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -114,7 +114,7 @@ function updateInvoice(req, res, next) {
     });
 }
 exports.updateInvoice = updateInvoice;
-function deleteInvoice(req, res, next) {
+function deleteInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

@@ -65,6 +65,7 @@ model InvoiceLines {
     invoiceId     String
     product       Products?     @relation(fields: [productId], references: [id])
     productId String?
+
 }
 
 model Contact {

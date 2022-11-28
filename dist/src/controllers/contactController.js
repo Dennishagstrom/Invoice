@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteContact = exports.updateContact = exports.newContact = exports.findContactById = exports.getContacts = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getContacts(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getContacts(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const contacts = yield client_1.default.contact.findMany();
         res.status(200).json({
@@ -25,7 +25,7 @@ function getContacts(req, res, next) {
     });
 }
 exports.getContacts = getContacts;
-function findContactById(req, res, next) {
+function findContactById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const params = req.query;
         try {
@@ -51,7 +51,7 @@ function findContactById(req, res, next) {
     });
 }
 exports.findContactById = findContactById;
-function newContact(req, res, next) {
+function newContact(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
@@ -66,7 +66,17 @@ function newContact(req, res, next) {
                     city: data.city,
                     country: data.country,
                     type: data.type,
-                    contactOwnerId: data.contactOwnerId
+                    contactOwnerId: data.contactOwnerId,
+                    contactPersons: {
+                        create: data.contactPersons.map((contactPerson) => {
+                            return {
+                                firstName: contactPerson.firstName,
+                                lastName: contactPerson.lastName,
+                                phone: contactPerson.phone,
+                                email: contactPerson.email,
+                            };
+                        })
+                    }
                 }
             });
             return res.status(201).json({
@@ -80,8 +90,9 @@ function newContact(req, res, next) {
     });
 }
 exports.newContact = newContact;
-function updateContact(req, res, next) {
+function updateContact(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(req.body);
         try {
             const { id } = req.params;
             const data = req.body;
@@ -99,7 +110,7 @@ function updateContact(req, res, next) {
                     city: data.city,
                     country: data.country,
                     type: data.type,
-                    contactOwnerId: data.contactOwnerId
+                    contactOwnerId: data.contactOwnerId,
                 }
             });
             return res.status(200).json({
@@ -113,7 +124,7 @@ function updateContact(req, res, next) {
     });
 }
 exports.updateContact = updateContact;
-function deleteContact(req, res, next) {
+function deleteContact(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

@@ -1,12 +1,12 @@
 import userRoles from '..lib/enums/userRoles'
 
 export interface User {
-    id: string
+    id?: string
     firstName: string
     lastName: string
     email: string
     password: string
     role: userRoles
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
 }

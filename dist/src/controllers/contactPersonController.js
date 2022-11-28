@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteContactPerson = exports.updateContactPerson = exports.newContactPerson = exports.getContactPerson = exports.getContactPersons = void 0;
 const client_1 = __importDefault(require("../utils/client"));
-const errorHandler_1 = require("./errorHandler");
-function getContactPersons(req, res, next) {
+const errorHandler_1 = require("../utils/errorHandler");
+function getContactPersons(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const contactPersons = yield client_1.default.contactPerson.findMany();
         res.status(200).json({
@@ -25,7 +25,7 @@ function getContactPersons(req, res, next) {
     });
 }
 exports.getContactPersons = getContactPersons;
-function getContactPerson(req, res, next) {
+function getContactPerson(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -48,7 +48,7 @@ function getContactPerson(req, res, next) {
     });
 }
 exports.getContactPerson = getContactPerson;
-function newContactPerson(req, res, next) {
+function newContactPerson(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
@@ -75,7 +75,7 @@ function newContactPerson(req, res, next) {
     });
 }
 exports.newContactPerson = newContactPerson;
-function updateContactPerson(req, res, next) {
+function updateContactPerson(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
@@ -103,7 +103,7 @@ function updateContactPerson(req, res, next) {
     });
 }
 exports.updateContactPerson = updateContactPerson;
-function deleteContactPerson(req, res, next) {
+function deleteContactPerson(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;

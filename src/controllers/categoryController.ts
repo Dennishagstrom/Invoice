@@ -1,11 +1,11 @@
-import {Category} from "../types/category";
+import {Category} from "../lib/types/category";
 import prisma from "../utils/client";
-import {Product} from "../types/product";
-import {errorHandler} from "./errorHandler";
+import {Product} from "../lib/types/product";
+import {errorHandler} from "../utils/errorHandler";
 import {Request, Response, NextFunction} from "express";
 
 
-export async function getCategories(req: Request, res: Response, next: NextFunction) {
+export async function getCategories(req: Request, res: Response) {
     const categories = await prisma.category.findMany();
     res.status(200).json({
         message: 'All categories',
@@ -13,7 +13,7 @@ export async function getCategories(req: Request, res: Response, next: NextFunct
     });
 }
 
-export async function findCategoryById(req: Request, res: Response, next: NextFunction) {
+export async function findCategoryById(req: Request, res: Response) {
     try {
         const {id} = req.params;
         const category = await prisma.category.findUnique({
@@ -33,7 +33,7 @@ export async function findCategoryById(req: Request, res: Response, next: NextFu
     }
 }
 
-export async function newCategory(req: Request, res: Response, next: NextFunction) {
+export async function newCategory(req: Request, res: Response) {
     const data: Category = req.body;
     try {
         const category = await prisma.category.create({
@@ -60,7 +60,7 @@ export async function newCategory(req: Request, res: Response, next: NextFunctio
     }
 }
 
-export async function updateCategory(req: Request, res: Response, next: NextFunction) {
+export async function updateCategory(req: Request, res: Response) {
     try {
         const {id} = req.params
         const updatedCategory = await prisma.category.update({
@@ -81,7 +81,7 @@ export async function updateCategory(req: Request, res: Response, next: NextFunc
     }
 }
 
-export async function deleteCategory(req: Request, res: Response, next: NextFunction) {
+export async function deleteCategory(req: Request, res: Response) {
     try {
         const {id} = req.params
         const deletedCategory = await prisma.category.delete({

@@ -6,8 +6,8 @@ export interface Product {
     unitPrice: number
     note: string | null
     active: boolean
-    createdAt: Date
-    updatedAt: Date
-    category: Category | null
-    categoryId: string | null
+    createdAt?: Date
+    updatedAt?: Date
+    category?: Category | null
+    categoryId?: string | null
 }

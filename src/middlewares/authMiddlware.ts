@@ -1,6 +1,4 @@
 const jwt = require("jsonwebtoken");
-const express = require("express");
-const cookieParser = require("cookie-parser");
 import {NextFunction, Response, Request} from "express"
 
 

@@ -23,6 +23,7 @@ const contactPerson_schema_1 = __importDefault(require("../lib/schemas/contactPe
 const contact_schema_1 = __importDefault(require("../lib/schemas/contact.schema"));
 const category_schema_1 = __importDefault(require("../lib/schemas/category.schema"));
 const product_schema_1 = __importDefault(require("../lib/schemas/product.schema"));
+const seed_1 = require("../../prisma/seed");
 exports.routes = express_1.default.Router();
 // USER ROUTES
 exports.routes.use('/users', authMiddlware_1.authorization);
@@ -76,5 +77,7 @@ exports.routes.delete('/offers/:id', offerController_1.deleteOffer);
 exports.routes.post('/login', authController_1.login);
 exports.routes.post('/logout', authController_1.logout);
 exports.routes.post('/register', (0, validate_1.default)(user_schema_1.default), authController_1.registerUser);
+// SEED DATABASE
+exports.routes.get('/seed', seed_1.seedDb);
 // CHECK IF AUTHENTICATED
 exports.routes.get('/protected', authMiddlware_1.authorization, authController_1.protectedRoute);
